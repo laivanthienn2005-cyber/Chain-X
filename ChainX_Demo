@@ -1,0 +1,1522 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ChainX - CO₂ Freight Transport Analytics Platform</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+        body { font-family: 'Inter', sans-serif; }
+        .gradient-bg { background: linear-gradient(135deg, #059669 0%, #10b981 50%, #34d399 100%); }
+        .card-shadow { box-shadow: 0 10px 25px rgba(0,0,0,0.1); }
+        .map-container { height: 400px; border-radius: 12px; overflow: hidden; background: #f3f4f6; }
+        .loading-spinner { animation: spin 1s linear infinite; }
+        @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+        .fade-in { animation: fadeIn 0.5s ease-in; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        .sidebar-active { background: rgba(16, 185, 129, 0.1); border-right: 3px solid #10b981; }
+        .co2-high { background: #fee2e2; color: #dc2626; }
+        .co2-medium { background: #fef3c7; color: #d97706; }
+        .co2-low { background: #dcfce7; color: #16a34a; }
+        .pulse { animation: pulse 2s infinite; }
+        @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
+        .hero-bg { background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 50%, #60a5fa 100%); }
+        .feature-card:hover { transform: translateY(-5px); transition: transform 0.3s ease; }
+    </style>
+</head>
+<body class="bg-gray-50 min-h-screen">
+    <!-- Landing Page -->
+    <div id="landingPage">
+        <!-- Hero Section -->
+        <div class="hero-bg text-white">
+            <nav class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+                <div class="flex justify-between items-center">
+                    <div class="flex items-center space-x-3">
+                        <div class="w-12 h-12 bg-white rounded-xl flex items-center justify-center">
+                            <span class="text-blue-600 font-bold text-2xl">🌱</span>
+                        </div>
+                        <div>
+                            <h1 class="text-2xl font-bold">ChainX</h1>
+                            <p class="text-sm opacity-80">CO₂ Transport Analytics</p>
+                        </div>
+                    </div>
+                    <button onclick="showDemo()" class="bg-white text-blue-600 hover:bg-gray-100 px-6 py-2 rounded-lg font-medium transition-colors">
+                        View Demo
+                    </button>
+                </div>
+            </nav>
+            
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
+                <div class="text-center">
+                    <h1 class="text-5xl font-bold mb-6">Revolutionizing Freight Transport</h1>
+                    <p class="text-xl mb-8 opacity-90 max-w-3xl mx-auto">
+                        IPCC-compliant CO₂ emissions tracking, real-time OBD-II integration, and AI-powered optimization for sustainable logistics
+                    </p>
+                    <div class="flex justify-center space-x-4">
+                        <button onclick="showDemo()" class="bg-green-600 hover:bg-green-700 text-white px-8 py-4 rounded-lg text-lg font-medium transition-colors">
+                            🚀 Launch Platform
+                        </button>
+                        <button onclick="scrollToFeatures()" class="bg-white/20 hover:bg-white/30 text-white px-8 py-4 rounded-lg text-lg font-medium transition-colors">
+                            📋 Learn More
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Features Section -->
+        <div id="featuresSection" class="py-20 bg-white">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center mb-16">
+                    <h2 class="text-4xl font-bold text-gray-800 mb-4">Complete CO₂ Analytics Suite</h2>
+                    <p class="text-xl text-gray-600 max-w-3xl mx-auto">
+                        From IPCC-standard calculations to real-time OBD-II monitoring, ChainX provides everything needed for sustainable freight management
+                    </p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    <div class="feature-card bg-white p-8 rounded-xl card-shadow">
+                        <div class="w-16 h-16 bg-green-100 rounded-xl flex items-center justify-center mb-6">
+                            <span class="text-3xl">🧮</span>
+                        </div>
+                        <h3 class="text-xl font-bold text-gray-800 mb-4">IPCC Standard Calculator</h3>
+                        <p class="text-gray-600 mb-4">Precise CO₂ emissions calculations following IPCC methodology with vehicle type, fuel, load, and route optimization.</p>
+                        <ul class="text-sm text-gray-600 space-y-2">
+                            <li>✓ Multiple vehicle categories</li>
+                            <li>✓ Fuel type adjustments</li>
+                            <li>✓ Load factor optimization</li>
+                            <li>✓ Real-time route analysis</li>
+                        </ul>
+                    </div>
+
+                    <div class="feature-card bg-white p-8 rounded-xl card-shadow">
+                        <div class="w-16 h-16 bg-blue-100 rounded-xl flex items-center justify-center mb-6">
+                            <span class="text-3xl">📍</span>
+                        </div>
+                        <h3 class="text-xl font-bold text-gray-800 mb-4">Live Fleet Tracking</h3>
+                        <p class="text-gray-600 mb-4">Real-time GPS monitoring with emission alerts and performance analytics for your entire fleet.</p>
+                        <ul class="text-sm text-gray-600 space-y-2">
+                            <li>✓ Real-time GPS tracking</li>
+                            <li>✓ Emission hotspot alerts</li>
+                            <li>✓ Route optimization</li>
+                            <li>✓ Driver behavior analysis</li>
+                        </ul>
+                    </div>
+
+                    <div class="feature-card bg-white p-8 rounded-xl card-shadow">
+                        <div class="w-16 h-16 bg-purple-100 rounded-xl flex items-center justify-center mb-6">
+                            <span class="text-3xl">🔌</span>
+                        </div>
+                        <h3 class="text-xl font-bold text-gray-800 mb-4">OBD-II Integration</h3>
+                        <p class="text-gray-600 mb-4">Direct integration with Car Scanner mobile app for real-world engine data and emissions monitoring.</p>
+                        <ul class="text-sm text-gray-600 space-y-2">
+                            <li>✓ Real-time engine data</li>
+                            <li>✓ Fuel consumption tracking</li>
+                            <li>✓ Emission sensor monitoring</li>
+                            <li>✓ Performance diagnostics</li>
+                        </ul>
+                    </div>
+
+                    <div class="feature-card bg-white p-8 rounded-xl card-shadow">
+                        <div class="w-16 h-16 bg-orange-100 rounded-xl flex items-center justify-center mb-6">
+                            <span class="text-3xl">📊</span>
+                        </div>
+                        <h3 class="text-xl font-bold text-gray-800 mb-4">Analytics Dashboard</h3>
+                        <p class="text-gray-600 mb-4">Comprehensive dashboard with real-time metrics, trends, and actionable insights for fleet optimization.</p>
+                        <ul class="text-sm text-gray-600 space-y-2">
+                            <li>✓ Real-time emissions data</li>
+                            <li>✓ Fuel efficiency metrics</li>
+                            <li>✓ Cost analysis</li>
+                            <li>✓ Performance trends</li>
+                        </ul>
+                    </div>
+
+                    <div class="feature-card bg-white p-8 rounded-xl card-shadow">
+                        <div class="w-16 h-16 bg-red-100 rounded-xl flex items-center justify-center mb-6">
+                            <span class="text-3xl">📋</span>
+                        </div>
+                        <h3 class="text-xl font-bold text-gray-800 mb-4">Compliance Reports</h3>
+                        <p class="text-gray-600 mb-4">Automated reporting for environmental compliance with detailed analysis and optimization recommendations.</p>
+                        <ul class="text-sm text-gray-600 space-y-2">
+                            <li>✓ IPCC-compliant reports</li>
+                            <li>✓ Regulatory compliance</li>
+                            <li>✓ Optimization recommendations</li>
+                            <li>✓ Export capabilities</li>
+                        </ul>
+                    </div>
+
+                    <div class="feature-card bg-white p-8 rounded-xl card-shadow">
+                        <div class="w-16 h-16 bg-yellow-100 rounded-xl flex items-center justify-center mb-6">
+                            <span class="text-3xl">⚡</span>
+                        </div>
+                        <h3 class="text-xl font-bold text-gray-800 mb-4">AI Optimization</h3>
+                        <p class="text-gray-600 mb-4">Machine learning algorithms for route optimization, load planning, and emission reduction strategies.</p>
+                        <ul class="text-sm text-gray-600 space-y-2">
+                            <li>✓ Route optimization</li>
+                            <li>✓ Load planning</li>
+                            <li>✓ Predictive maintenance</li>
+                            <li>✓ Cost reduction strategies</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Demo Access Section -->
+        <div class="py-20 gradient-bg text-white">
+            <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+                <h2 class="text-4xl font-bold mb-6">Ready to Experience ChainX?</h2>
+                <p class="text-xl mb-8 opacity-90">
+                    Access the full platform demo with sample data and all features enabled. Perfect for judges and stakeholders to explore our complete solution.
+                </p>
+                <div class="bg-white/10 backdrop-blur rounded-xl p-8 mb-8">
+                    <h3 class="text-2xl font-bold mb-4">Demo Access Instructions</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 text-left">
+                        <div>
+                            <h4 class="font-semibold mb-2">🏢 Company ID:</h4>
+                            <p class="bg-white/20 px-4 py-2 rounded-lg font-mono">JudgePanel2024</p>
+                        </div>
+                        <div>
+                            <h4 class="font-semibold mb-2">🔑 Password:</h4>
+                            <p class="bg-white/20 px-4 py-2 rounded-lg font-mono">ChainXDemo</p>
+                        </div>
+                    </div>
+                    <p class="text-sm mt-4 opacity-80">Or use any Company ID and Password combination for instant access</p>
+                </div>
+                <button onclick="showDemo()" class="bg-white text-green-600 hover:bg-gray-100 px-8 py-4 rounded-lg text-lg font-medium transition-colors">
+                    🚀 Launch ChainX Platform
+                </button>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="bg-gray-800 text-white py-12">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    <div>
+                        <div class="flex items-center space-x-3 mb-4">
+                            <div class="w-10 h-10 bg-green-600 rounded-xl flex items-center justify-center">
+                                <span class="text-white font-bold text-xl">🌱</span>
+                            </div>
+                            <div>
+                                <h3 class="text-xl font-bold">ChainX</h3>
+                                <p class="text-sm opacity-80">CO₂ Transport Analytics</p>
+                            </div>
+                        </div>
+                        <p class="text-gray-400">
+                            Revolutionizing freight transport with IPCC-compliant emissions tracking and AI-powered optimization.
+                        </p>
+                    </div>
+                    <div>
+                        <h4 class="font-semibold mb-4">Key Features</h4>
+                        <ul class="space-y-2 text-gray-400">
+                            <li>IPCC Standard Calculations</li>
+                            <li>Real-time Fleet Tracking</li>
+                            <li>OBD-II Integration</li>
+                            <li>AI-Powered Optimization</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h4 class="font-semibold mb-4">Demo Platform</h4>
+                        <p class="text-gray-400 mb-4">
+                            Full-featured demo available for judges and stakeholders with sample data and all functionality enabled.
+                        </p>
+                        <button onclick="showDemo()" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg transition-colors">
+                            Access Demo
+                        </button>
+                    </div>
+                </div>
+                <div class="border-t border-gray-700 mt-8 pt-8 text-center text-gray-400">
+                    <p>&copy; 2024 ChainX Platform. Built for sustainable freight transport.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Login Modal -->
+    <div id="loginModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
+        <div class="bg-white rounded-xl max-w-md w-full mx-4 p-8">
+            <div class="text-center mb-8">
+                <div class="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <span class="text-green-600 text-2xl">🌱</span>
+                </div>
+                <h1 class="text-2xl font-bold text-gray-800">ChainX Platform Access</h1>
+                <p class="text-gray-600 mt-2">CO₂ Freight Transport Analytics</p>
+            </div>
+            <form onsubmit="login(event)" class="space-y-4">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Company ID</label>
+                    <input type="text" id="companyId" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500" placeholder="Enter your company ID" value="JudgePanel2024">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Password</label>
+                    <input type="password" id="password" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500" placeholder="Enter your password" value="ChainXDemo">
+                </div>
+                <button type="submit" class="w-full bg-green-600 hover:bg-green-700 text-white py-2 px-4 rounded-lg transition-colors">
+                    Access ChainX Platform
+                </button>
+            </form>
+            <div class="mt-6 text-center text-sm text-gray-600">
+                <p><strong>For Judges:</strong> Use the pre-filled credentials above</p>
+                <p class="mt-1">Or enter any Company ID and Password for instant access</p>
+                <button onclick="hideDemoModal()" class="mt-3 text-blue-600 hover:text-blue-700">← Back to Website</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Application -->
+    <div id="mainApp" class="hidden">
+        <!-- Navigation -->
+        <nav class="gradient-bg text-white shadow-lg">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="flex justify-between items-center h-16">
+                    <div class="flex items-center space-x-3">
+                        <div class="w-10 h-10 bg-white rounded-xl flex items-center justify-center">
+                            <span class="text-green-600 font-bold text-xl">🌱</span>
+                        </div>
+                        <div>
+                            <h1 class="text-xl font-bold">ChainX Platform</h1>
+                            <p class="text-xs opacity-80">CO₂ Transport Analytics</p>
+                        </div>
+                    </div>
+                    <div class="flex items-center space-x-4">
+                        <div class="flex items-center space-x-2">
+                            <div class="w-8 h-8 bg-white/20 rounded-full flex items-center justify-center">
+                                <span class="text-sm">🏢</span>
+                            </div>
+                            <span class="text-sm" id="companyName">Demo Transport Co.</span>
+                        </div>
+                        <button onclick="logout()" class="bg-white/20 hover:bg-white/30 px-4 py-2 rounded-lg text-sm transition-colors">
+                            Back to Website
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </nav>
+
+        <div class="flex">
+            <!-- Sidebar -->
+            <div class="w-64 bg-white shadow-lg min-h-screen">
+                <div class="p-6">
+                    <nav class="space-y-2">
+                        <button onclick="showSection('dashboard')" class="sidebar-btn w-full text-left px-4 py-3 rounded-lg hover:bg-gray-100 transition-colors sidebar-active" data-section="dashboard">
+                            <span class="flex items-center space-x-3">
+                                <span>📊</span>
+                                <span class="font-medium">Dashboard</span>
+                            </span>
+                        </button>
+                        <button onclick="showSection('calculator')" class="sidebar-btn w-full text-left px-4 py-3 rounded-lg hover:bg-gray-100 transition-colors" data-section="calculator">
+                            <span class="flex items-center space-x-3">
+                                <span>🧮</span>
+                                <span class="font-medium">CO₂ Calculator</span>
+                            </span>
+                        </button>
+                        <button onclick="showSection('tracking')" class="sidebar-btn w-full text-left px-4 py-3 rounded-lg hover:bg-gray-100 transition-colors" data-section="tracking">
+                            <span class="flex items-center space-x-3">
+                                <span>📍</span>
+                                <span class="font-medium">Live Tracking</span>
+                            </span>
+                        </button>
+                        <button onclick="showSection('obd')" class="sidebar-btn w-full text-left px-4 py-3 rounded-lg hover:bg-gray-100 transition-colors" data-section="obd">
+                            <span class="flex items-center space-x-3">
+                                <span>🔌</span>
+                                <span class="font-medium">OBD-II Data</span>
+                            </span>
+                        </button>
+                        <button onclick="showSection('reports')" class="sidebar-btn w-full text-left px-4 py-3 rounded-lg hover:bg-gray-100 transition-colors" data-section="reports">
+                            <span class="flex items-center space-x-3">
+                                <span>📋</span>
+                                <span class="font-medium">Reports</span>
+                            </span>
+                        </button>
+                        <button onclick="showSection('optimization')" class="sidebar-btn w-full text-left px-4 py-3 rounded-lg hover:bg-gray-100 transition-colors" data-section="optimization">
+                            <span class="flex items-center space-x-3">
+                                <span>⚡</span>
+                                <span class="font-medium">Optimization</span>
+                            </span>
+                        </button>
+                    </nav>
+                </div>
+            </div>
+
+            <!-- Main Content -->
+            <div class="flex-1 p-8">
+                <!-- Dashboard Section -->
+                <div id="dashboard" class="section">
+                    <div class="mb-8">
+                        <h2 class="text-3xl font-bold text-gray-800 mb-2">CO₂ Analytics Dashboard</h2>
+                        <p class="text-gray-600">Real-time emissions monitoring and fleet performance</p>
+                    </div>
+
+                    <!-- Quick Data Input -->
+                    <div class="bg-white rounded-xl card-shadow p-6 mb-8">
+                        <h3 class="text-xl font-bold text-gray-800 mb-4">Quick Trip Entry</h3>
+                        <form onsubmit="addQuickTrip(event)" class="grid grid-cols-1 md:grid-cols-5 gap-4">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Vehicle ID</label>
+                                <input type="text" id="quickVehicleId" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500" placeholder="TRK-001" value="TRK-004">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Distance (km)</label>
+                                <input type="number" id="quickDistance" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500" placeholder="150" value="125">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Fuel Used (L)</label>
+                                <input type="number" step="0.1" id="quickFuel" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500" placeholder="12.5" value="9.8">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Load (kg)</label>
+                                <input type="number" id="quickLoad" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500" placeholder="2000" value="1800">
+                            </div>
+                            <div class="flex items-end">
+                                <button type="submit" class="w-full bg-green-600 hover:bg-green-700 text-white py-2 px-4 rounded-lg transition-colors">
+                                    Add Trip
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+
+                    <!-- Stats Cards -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+                        <div class="bg-white p-6 rounded-xl card-shadow">
+                            <div class="flex items-center justify-between">
+                                <div>
+                                    <p class="text-sm text-gray-600">Total CO₂ Emissions</p>
+                                    <p class="text-3xl font-bold text-red-600" id="totalEmissions">2,847 kg</p>
+                                </div>
+                                <div class="w-12 h-12 bg-red-100 rounded-lg flex items-center justify-center">
+                                    <span class="text-red-600 text-xl">🏭</span>
+                                </div>
+                            </div>
+                            <div class="mt-4 flex items-center text-sm">
+                                <span class="text-red-600">↗ +8%</span>
+                                <span class="text-gray-600 ml-2">vs last month</span>
+                            </div>
+                        </div>
+
+                        <div class="bg-white p-6 rounded-xl card-shadow">
+                            <div class="flex items-center justify-between">
+                                <div>
+                                    <p class="text-sm text-gray-600">Fuel Efficiency</p>
+                                    <p class="text-3xl font-bold text-blue-600">7.2L/100km</p>
+                                </div>
+                                <div class="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center">
+                                    <span class="text-blue-600 text-xl">⛽</span>
+                                </div>
+                            </div>
+                            <div class="mt-4 flex items-center text-sm">
+                                <span class="text-green-600">↘ -3%</span>
+                                <span class="text-gray-600 ml-2">improvement</span>
+                            </div>
+                        </div>
+
+                        <div class="bg-white p-6 rounded-xl card-shadow">
+                            <div class="flex items-center justify-between">
+                                <div>
+                                    <p class="text-sm text-gray-600">Active Vehicles</p>
+                                    <p class="text-3xl font-bold text-green-600" id="activeVehicles">12</p>
+                                </div>
+                                <div class="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center">
+                                    <span class="text-green-600 text-xl">🚛</span>
+                                </div>
+                            </div>
+                            <div class="mt-4 flex items-center text-sm">
+                                <span class="text-green-600 pulse">● Live</span>
+                                <span class="text-gray-600 ml-2">tracking active</span>
+                            </div>
+                        </div>
+
+                        <div class="bg-white p-6 rounded-xl card-shadow">
+                            <div class="flex items-center justify-between">
+                                <div>
+                                    <p class="text-sm text-gray-600">Carbon Savings</p>
+                                    <p class="text-3xl font-bold text-purple-600">341 kg</p>
+                                </div>
+                                <div class="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center">
+                                    <span class="text-purple-600 text-xl">🌱</span>
+                                </div>
+                            </div>
+                            <div class="mt-4 flex items-center text-sm">
+                                <span class="text-green-600">↗ +15%</span>
+                                <span class="text-gray-600 ml-2">optimization gains</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Live Fleet Map -->
+                    <div class="bg-white rounded-xl card-shadow p-6 mb-8">
+                        <h3 class="text-xl font-bold text-gray-800 mb-6">Live Fleet Tracking</h3>
+                        <div class="map-container flex items-center justify-center bg-gradient-to-br from-blue-50 to-green-50">
+                            <div class="text-center">
+                                <div class="text-6xl mb-4">🗺️</div>
+                                <h4 class="text-xl font-semibold text-gray-700 mb-2">Interactive Fleet Map</h4>
+                                <p class="text-gray-600 mb-4">Real-time GPS tracking with emission monitoring</p>
+                                <div class="flex justify-center space-x-4 text-sm">
+                                    <span class="flex items-center bg-white px-3 py-1 rounded-full shadow-sm">
+                                        <span class="w-3 h-3 bg-green-500 rounded-full mr-2"></span>Active (8)
+                                    </span>
+                                    <span class="flex items-center bg-white px-3 py-1 rounded-full shadow-sm">
+                                        <span class="w-3 h-3 bg-yellow-500 rounded-full mr-2"></span>Idle (3)
+                                    </span>
+                                    <span class="flex items-center bg-white px-3 py-1 rounded-full shadow-sm">
+                                        <span class="w-3 h-3 bg-red-500 rounded-full mr-2"></span>High Emissions (1)
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mt-4 flex justify-between items-center">
+                            <div class="text-sm text-gray-600">
+                                <span class="pulse">🟢</span> Live tracking active - Last updated: <span id="lastUpdate">Just now</span>
+                            </div>
+                            <button onclick="showSection('tracking')" class="text-green-600 hover:text-green-700 text-sm font-medium">
+                                View Full Tracking →
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Recent Calculations -->
+                    <div class="bg-white rounded-xl card-shadow p-6">
+                        <h3 class="text-xl font-bold text-gray-800 mb-6">Recent CO₂ Calculations</h3>
+                        <div class="space-y-4" id="recentCalculations">
+                            <!-- Recent calculations will be populated here -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- CO₂ Calculator Section -->
+                <div id="calculator" class="section hidden">
+                    <div class="mb-8">
+                        <h2 class="text-3xl font-bold text-gray-800 mb-2">IPCC Standard CO₂ Calculator</h2>
+                        <p class="text-gray-600">Calculate emissions based on IPCC methodology with comprehensive vehicle parameters</p>
+                    </div>
+
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                        <!-- Calculation Form -->
+                        <div class="bg-white rounded-xl card-shadow p-6">
+                            <h3 class="text-xl font-bold text-gray-800 mb-6">Route & Vehicle Parameters</h3>
+                            <form onsubmit="calculateEmissions(event)" class="space-y-6">
+                                <!-- Route Selection -->
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700 mb-2">Origin</label>
+                                        <input type="text" id="origin" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500" placeholder="Starting location" value="New York, NY">
+                                    </div>
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700 mb-2">Destination</label>
+                                        <input type="text" id="destination" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500" placeholder="End location" value="Boston, MA">
+                                    </div>
+                                </div>
+
+                                <!-- IPCC Parameters -->
+                                <div class="border-t pt-6">
+                                    <h4 class="font-semibold text-gray-800 mb-4">IPCC Calculation Parameters</h4>
+                                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                        <div>
+                                            <label class="block text-sm font-medium text-gray-700 mb-2">Vehicle Type</label>
+                                            <select id="vehicleType" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500">
+                                                <option value="light">Light Duty Vehicle (&lt;3.5t)</option>
+                                                <option value="medium" selected>Medium Duty Vehicle (3.5-12t)</option>
+                                                <option value="heavy">Heavy Duty Vehicle (&gt;12t)</option>
+                                                <option value="articulated">Articulated Truck</option>
+                                            </select>
+                                        </div>
+                                        <div>
+                                            <label class="block text-sm font-medium text-gray-700 mb-2">Fuel Type</label>
+                                            <select id="fuelType" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500">
+                                                <option value="diesel" selected>Diesel</option>
+                                                <option value="gasoline">Gasoline</option>
+                                                <option value="cng">Compressed Natural Gas</option>
+                                                <option value="electric">Electric</option>
+                                                <option value="hybrid">Hybrid</option>
+                                            </select>
+                                        </div>
+                                        <div>
+                                            <label class="block text-sm font-medium text-gray-700 mb-2">Load Weight (kg)</label>
+                                            <input type="number" id="loadWeight" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500" placeholder="Cargo weight" value="2500">
+                                        </div>
+                                        <div>
+                                            <label class="block text-sm font-medium text-gray-700 mb-2">Vehicle Age (years)</label>
+                                            <input type="number" id="vehicleAge" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500" placeholder="Vehicle age" value="3">
+                                        </div>
+                                        <div>
+                                            <label class="block text-sm font-medium text-gray-700 mb-2">Engine Size (L)</label>
+                                            <input type="number" step="0.1" id="engineSize" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500" placeholder="Engine displacement" value="3.0">
+                                        </div>
+                                        <div>
+                                            <label class="block text-sm font-medium text-gray-700 mb-2">Load Factor (%)</label>
+                                            <input type="number" id="loadFactor" min="0" max="100" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500" placeholder="Vehicle utilization" value="75">
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <button type="submit" class="w-full bg-green-600 hover:bg-green-700 text-white py-3 px-4 rounded-lg font-medium transition-colors">
+                                    Calculate CO₂ Emissions
+                                </button>
+                            </form>
+                        </div>
+
+                        <!-- Results Display -->
+                        <div class="space-y-6">
+                            <!-- Route Map -->
+                            <div class="bg-white rounded-xl card-shadow p-6">
+                                <h3 class="text-xl font-bold text-gray-800 mb-6">Route Preview</h3>
+                                <div class="map-container flex items-center justify-center bg-gradient-to-br from-green-50 to-blue-50">
+                                    <div class="text-center">
+                                        <div class="text-5xl mb-4">🗺️</div>
+                                        <h4 class="text-lg font-semibold text-gray-700 mb-2">Route Visualization</h4>
+                                        <p class="text-gray-600 text-sm">Interactive map with optimized routing</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Calculation Results -->
+                            <div id="calculationResults" class="bg-white rounded-xl card-shadow p-6">
+                                <h3 class="text-xl font-bold text-gray-800 mb-6">Emission Results</h3>
+                                <div class="space-y-4">
+                                    <div class="grid grid-cols-2 gap-4">
+                                        <div class="text-center p-4 bg-gray-50 rounded-lg">
+                                            <div class="text-2xl font-bold text-gray-800" id="totalCO2">-</div>
+                                            <div class="text-sm text-gray-600">Total CO₂ (kg)</div>
+                                        </div>
+                                        <div class="text-center p-4 bg-gray-50 rounded-lg">
+                                            <div class="text-2xl font-bold text-blue-600" id="co2PerKm">-</div>
+                                            <div class="text-sm text-gray-600">CO₂ per km (g)</div>
+                                        </div>
+                                    </div>
+                                    <div class="grid grid-cols-2 gap-4">
+                                        <div class="text-center p-4 bg-gray-50 rounded-lg">
+                                            <div class="text-2xl font-bold text-green-600" id="fuelConsumption">-</div>
+                                            <div class="text-sm text-gray-600">Fuel Used (L)</div>
+                                        </div>
+                                        <div class="text-center p-4 bg-gray-50 rounded-lg">
+                                            <div class="text-2xl font-bold text-purple-600" id="routeDistance">-</div>
+                                            <div class="text-sm text-gray-600">Distance (km)</div>
+                                        </div>
+                                    </div>
+                                    <div class="mt-6 p-4 rounded-lg" id="emissionCategory">
+                                        <div class="font-semibold" id="categoryText">Click "Calculate CO₂ Emissions" to see results</div>
+                                        <div class="text-sm mt-1" id="categoryDescription">IPCC-compliant calculations with detailed analysis</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Live Tracking Section -->
+                <div id="tracking" class="section hidden">
+                    <div class="mb-8">
+                        <h2 class="text-3xl font-bold text-gray-800 mb-2">Live Vehicle Tracking</h2>
+                        <p class="text-gray-600">Real-time GPS tracking and route monitoring with emission alerts</p>
+                    </div>
+
+                    <!-- Add New Vehicle Form -->
+                    <div class="bg-white rounded-xl card-shadow p-6 mb-6">
+                        <h3 class="text-lg font-semibold text-gray-800 mb-4">Add New Vehicle</h3>
+                        <form onsubmit="addNewVehicle(event)" class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Vehicle ID</label>
+                                <input type="text" id="newVehicleId" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500" placeholder="TRK-005" value="TRK-005">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Vehicle Type</label>
+                                <select id="newVehicleType" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500">
+                                    <option value="light">Light Truck</option>
+                                    <option value="medium" selected>Medium Truck</option>
+                                    <option value="heavy">Heavy Truck</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Fuel Type</label>
+                                <select id="newVehicleFuel" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500">
+                                    <option value="diesel" selected>Diesel</option>
+                                    <option value="gasoline">Gasoline</option>
+                                    <option value="electric">Electric</option>
+                                </select>
+                            </div>
+                            <div class="flex items-end">
+                                <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded-lg transition-colors">
+                                    Add Vehicle
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+
+                    <!-- Vehicle Selection -->
+                    <div class="bg-white rounded-xl card-shadow p-6 mb-6">
+                        <div class="flex justify-between items-center">
+                            <h3 class="text-lg font-semibold text-gray-800">Fleet Management</h3>
+                            <div class="flex space-x-4">
+                                <select id="vehicleSelect" onchange="selectVehicle()" class="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500">
+                                    <option value="">All Vehicles</option>
+                                    <option value="TRK-001">TRK-001 - Heavy Truck (Active)</option>
+                                    <option value="TRK-002">TRK-002 - Medium Truck (Active)</option>
+                                    <option value="TRK-003">TRK-003 - Light Truck (Idle)</option>
+                                </select>
+                                <button onclick="startLiveTracking()" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg transition-colors">
+                                    Start Live Tracking
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Live Map -->
+                    <div class="bg-white rounded-xl card-shadow p-6 mb-6">
+                        <div class="flex justify-between items-center mb-6">
+                            <h3 class="text-xl font-bold text-gray-800">Live Fleet Map</h3>
+                            <div class="flex items-center space-x-4">
+                                <span class="text-sm text-gray-600">Last updated: <span id="trackingLastUpdate">Just now</span></span>
+                                <div class="flex items-center space-x-2">
+                                    <div class="w-3 h-3 bg-green-500 rounded-full pulse"></div>
+                                    <span class="text-sm text-green-600">Live Tracking Active</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="map-container flex items-center justify-center bg-gradient-to-br from-green-50 to-blue-50" style="height: 500px;">
+                            <div class="text-center">
+                                <div class="text-6xl mb-4">🚛</div>
+                                <h4 class="text-xl font-semibold text-gray-700 mb-2">Real-Time Fleet Tracking</h4>
+                                <p class="text-gray-600 mb-4">GPS monitoring with emission hotspot detection</p>
+                                <div class="grid grid-cols-3 gap-4 text-sm">
+                                    <div class="bg-white p-3 rounded-lg shadow-sm">
+                                        <div class="text-green-600 font-bold">8 Active</div>
+                                        <div class="text-gray-600">Vehicles</div>
+                                    </div>
+                                    <div class="bg-white p-3 rounded-lg shadow-sm">
+                                        <div class="text-blue-600 font-bold">156 g/km</div>
+                                        <div class="text-gray-600">Avg CO₂</div>
+                                    </div>
+                                    <div class="bg-white p-3 rounded-lg shadow-sm">
+                                        <div class="text-purple-600 font-bold">1,247 km</div>
+                                        <div class="text-gray-600">Today</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Vehicle Status Cards -->
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6" id="vehicleStatusCards">
+                        <div class="bg-white rounded-xl card-shadow p-6">
+                            <div class="flex justify-between items-start mb-4">
+                                <div>
+                                    <h4 class="font-bold text-gray-800">TRK-001</h4>
+                                    <p class="text-sm text-gray-600">Heavy Duty Truck</p>
+                                </div>
+                                <span class="bg-green-100 text-green-800 px-2 py-1 rounded-full text-xs">Active</span>
+                            </div>
+                            <div class="space-y-3">
+                                <div class="flex justify-between">
+                                    <span class="text-gray-600">Current CO₂:</span>
+                                    <span class="font-medium">142 g/km</span>
+                                </div>
+                                <div class="flex justify-between">
+                                    <span class="text-gray-600">Speed:</span>
+                                    <span class="font-medium">65 km/h</span>
+                                </div>
+                                <div class="flex justify-between">
+                                    <span class="text-gray-600">Fuel Rate:</span>
+                                    <span class="font-medium">8.2 L/h</span>
+                                </div>
+                                <div class="flex justify-between">
+                                    <span class="text-gray-600">Location:</span>
+                                    <span class="font-medium text-sm">I-95 North</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="bg-white rounded-xl card-shadow p-6">
+                            <div class="flex justify-between items-start mb-4">
+                                <div>
+                                    <h4 class="font-bold text-gray-800">TRK-002</h4>
+                                    <p class="text-sm text-gray-600">Medium Duty Truck</p>
+                                </div>
+                                <span class="bg-green-100 text-green-800 px-2 py-1 rounded-full text-xs">Active</span>
+                            </div>
+                            <div class="space-y-3">
+                                <div class="flex justify-between">
+                                    <span class="text-gray-600">Current CO₂:</span>
+                                    <span class="font-medium">128 g/km</span>
+                                </div>
+                                <div class="flex justify-between">
+                                    <span class="text-gray-600">Speed:</span>
+                                    <span class="font-medium">72 km/h</span>
+                                </div>
+                                <div class="flex justify-between">
+                                    <span class="text-gray-600">Fuel Rate:</span>
+                                    <span class="font-medium">6.8 L/h</span>
+                                </div>
+                                <div class="flex justify-between">
+                                    <span class="text-gray-600">Location:</span>
+                                    <span class="font-medium text-sm">Route 1 South</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="bg-white rounded-xl card-shadow p-6">
+                            <div class="flex justify-between items-start mb-4">
+                                <div>
+                                    <h4 class="font-bold text-gray-800">TRK-003</h4>
+                                    <p class="text-sm text-gray-600">Light Duty Truck</p>
+                                </div>
+                                <span class="bg-yellow-100 text-yellow-800 px-2 py-1 rounded-full text-xs">Idle</span>
+                            </div>
+                            <div class="space-y-3">
+                                <div class="flex justify-between">
+                                    <span class="text-gray-600">Current CO₂:</span>
+                                    <span class="font-medium">0 g/km</span>
+                                </div>
+                                <div class="flex justify-between">
+                                    <span class="text-gray-600">Speed:</span>
+                                    <span class="font-medium">0 km/h</span>
+                                </div>
+                                <div class="flex justify-between">
+                                    <span class="text-gray-600">Fuel Rate:</span>
+                                    <span class="font-medium">0.8 L/h</span>
+                                </div>
+                                <div class="flex justify-between">
+                                    <span class="text-gray-600">Location:</span>
+                                    <span class="font-medium text-sm">Depot</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- OBD-II Data Section -->
+                <div id="obd" class="section hidden">
+                    <div class="mb-8">
+                        <h2 class="text-3xl font-bold text-gray-800 mb-2">OBD-II Real-Time Data</h2>
+                        <p class="text-gray-600">Car Scanner mobile app integration for real-world emissions monitoring</p>
+                    </div>
+
+                    <!-- Manual Data Entry -->
+                    <div class="bg-white rounded-xl card-shadow p-6 mb-6">
+                        <h3 class="text-lg font-semibold text-gray-800 mb-4">Manual OBD-II Data Entry</h3>
+                        <form onsubmit="addManualOBDData(event)" class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Vehicle ID</label>
+                                <input type="text" id="obdVehicleId" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500" placeholder="TRK-001" value="TRK-001">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Engine RPM</label>
+                                <input type="number" id="manualRPM" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500" placeholder="2150" value="2150">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Speed (km/h)</label>
+                                <input type="number" id="manualSpeed" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500" placeholder="65" value="65">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Fuel Rate (L/h)</label>
+                                <input type="number" step="0.1" id="manualFuelRate" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500" placeholder="8.2" value="8.2">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Engine Load (%)</label>
+                                <input type="number" id="manualEngineLoad" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500" placeholder="45" value="45">
+                            </div>
+                            <div class="flex items-end">
+                                <button type="submit" class="w-full bg-purple-600 hover:bg-purple-700 text-white py-2 px-4 rounded-lg transition-colors">
+                                    Add OBD Data
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+
+                    <!-- Connection Status -->
+                    <div class="bg-white rounded-xl card-shadow p-6 mb-6">
+                        <div class="flex justify-between items-center">
+                            <div>
+                                <h3 class="text-lg font-semibold text-gray-800">OBD-II Connection Status</h3>
+                                <p class="text-sm text-gray-600">Car Scanner mobile app data feed integration</p>
+                            </div>
+                            <div class="flex items-center space-x-4">
+                                <div class="flex items-center space-x-2">
+                                    <div class="w-3 h-3 bg-green-500 rounded-full pulse"></div>
+                                    <span class="text-sm text-green-600">Connected</span>
+                                </div>
+                                <button onclick="simulateOBDData()" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition-colors">
+                                    Start Data Simulation
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Real-time OBD Data -->
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+                        <div class="bg-white rounded-xl card-shadow p-6">
+                            <h3 class="text-xl font-bold text-gray-800 mb-6">Live Engine Data</h3>
+                            <div class="grid grid-cols-2 gap-4">
+                                <div class="text-center p-4 bg-gray-50 rounded-lg">
+                                    <div class="text-2xl font-bold text-blue-600" id="engineRPM">2,150</div>
+                                    <div class="text-sm text-gray-600">Engine RPM</div>
+                                </div>
+                                <div class="text-center p-4 bg-gray-50 rounded-lg">
+                                    <div class="text-2xl font-bold text-green-600" id="vehicleSpeed">65</div>
+                                    <div class="text-sm text-gray-600">Speed (km/h)</div>
+                                </div>
+                                <div class="text-center p-4 bg-gray-50 rounded-lg">
+                                    <div class="text-2xl font-bold text-orange-600" id="fuelRate">8.2</div>
+                                    <div class="text-sm text-gray-600">Fuel Rate (L/h)</div>
+                                </div>
+                                <div class="text-center p-4 bg-gray-50 rounded-lg">
+                                    <div class="text-2xl font-bold text-purple-600" id="engineLoad">45</div>
+                                    <div class="text-sm text-gray-600">Engine Load (%)</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="bg-white rounded-xl card-shadow p-6">
+                            <h3 class="text-xl font-bold text-gray-800 mb-6">Emission Sensors</h3>
+                            <div class="space-y-4">
+                                <div class="flex justify-between items-center">
+                                    <span class="text-gray-600">O₂ Sensor</span>
+                                    <div class="flex items-center space-x-2">
+                                        <div class="w-32 bg-gray-200 rounded-full h-2">
+                                            <div class="bg-green-600 h-2 rounded-full" style="width: 78%" id="o2SensorBar"></div>
+                                        </div>
+                                        <span class="text-sm font-medium" id="o2Sensor">0.78V</span>
+                                    </div>
+                                </div>
+                                <div class="flex justify-between items-center">
+                                    <span class="text-gray-600">MAF Sensor</span>
+                                    <div class="flex items-center space-x-2">
+                                        <div class="w-32 bg-gray-200 rounded-full h-2">
+                                            <div class="bg-blue-600 h-2 rounded-full" style="width: 65%" id="mafSensorBar"></div>
+                                        </div>
+                                        <span class="text-sm font-medium" id="mafSensor">12.5 g/s</span>
+                                    </div>
+                                </div>
+                                <div class="flex justify-between items-center">
+                                    <span class="text-gray-600">Coolant Temp</span>
+                                    <div class="flex items-center space-x-2">
+                                        <div class="w-32 bg-gray-200 rounded-full h-2">
+                                            <div class="bg-orange-600 h-2 rounded-full" style="width: 82%" id="coolantTempBar"></div>
+                                        </div>
+                                        <span class="text-sm font-medium" id="coolantTemp">89°C</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Real-time CO₂ Calculation -->
+                    <div class="bg-white rounded-xl card-shadow p-6">
+                        <h3 class="text-xl font-bold text-gray-800 mb-6">Real-Time CO₂ Calculation</h3>
+                        <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+                            <div class="text-center p-4 bg-red-50 rounded-lg">
+                                <div class="text-3xl font-bold text-red-600" id="realTimeCO2">142</div>
+                                <div class="text-sm text-gray-600">Current CO₂ (g/km)</div>
+                            </div>
+                            <div class="text-center p-4 bg-blue-50 rounded-lg">
+                                <div class="text-3xl font-bold text-blue-600" id="avgCO2">156</div>
+                                <div class="text-sm text-gray-600">Trip Average (g/km)</div>
+                            </div>
+                            <div class="text-center p-4 bg-green-50 rounded-lg">
+                                <div class="text-3xl font-bold text-green-600" id="totalTripCO2">12.4</div>
+                                <div class="text-sm text-gray-600">Total Trip CO₂ (kg)</div>
+                            </div>
+                            <div class="text-center p-4 bg-purple-50 rounded-lg">
+                                <div class="text-3xl font-bold text-purple-600" id="fuelEfficiency">7.8</div>
+                                <div class="text-sm text-gray-600">Efficiency (L/100km)</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Reports Section -->
+                <div id="reports" class="section hidden">
+                    <div class="mb-8">
+                        <h2 class="text-3xl font-bold text-gray-800 mb-2">CO₂ Emission Reports</h2>
+                        <p class="text-gray-600">Comprehensive analysis and optimization recommendations</p>
+                    </div>
+
+                    <!-- Report Generation -->
+                    <div class="bg-white rounded-xl card-shadow p-6 mb-6">
+                        <div class="flex justify-between items-center">
+                            <div>
+                                <h3 class="text-lg font-semibold text-gray-800">Generate New Report</h3>
+                                <p class="text-sm text-gray-600">Create detailed emission analysis reports with optimization recommendations</p>
+                            </div>
+                            <button onclick="generateReport()" class="bg-green-600 hover:bg-green-700 text-white px-6 py-2 rounded-lg transition-colors">
+                                Generate Report
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Sample Report -->
+                    <div class="bg-white rounded-xl card-shadow p-6" id="sampleReport">
+                        <div class="border-b pb-6 mb-6">
+                            <div class="flex justify-between items-start">
+                                <div>
+                                    <h3 class="text-2xl font-bold text-gray-800">Emission Analysis Report</h3>
+                                    <p class="text-gray-600">Generated on: <span id="reportDate">March 15, 2024</span></p>
+                                    <p class="text-gray-600">Period: Last 30 days</p>
+                                </div>
+                                <div class="text-right">
+                                    <div class="text-3xl font-bold text-red-600">2,847 kg</div>
+                                    <div class="text-sm text-gray-600">Total CO₂ Emissions</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Report Summary -->
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                            <div class="text-center p-4 bg-red-50 rounded-lg">
+                                <div class="text-2xl font-bold text-red-600">156 g/km</div>
+                                <div class="text-sm text-gray-600">Average CO₂ per km</div>
+                            </div>
+                            <div class="text-center p-4 bg-blue-50 rounded-lg">
+                                <div class="text-2xl font-bold text-blue-600">18,250 km</div>
+                                <div class="text-sm text-gray-600">Total Distance</div>
+                            </div>
+                            <div class="text-center p-4 bg-green-50 rounded-lg">
+                                <div class="text-2xl font-bold text-green-600">7.8 L/100km</div>
+                                <div class="text-sm text-gray-600">Fleet Efficiency</div>
+                            </div>
+                        </div>
+
+                        <!-- Optimization Recommendations -->
+                        <div class="mb-8">
+                            <h4 class="text-xl font-bold text-gray-800 mb-4">AI-Powered Optimization Recommendations</h4>
+                            <div class="space-y-4">
+                                <div class="flex items-start space-x-4 p-4 bg-green-50 rounded-lg">
+                                    <div class="w-8 h-8 bg-green-100 rounded-full flex items-center justify-center flex-shrink-0">
+                                        <span class="text-green-600 text-sm">1</span>
+                                    </div>
+                                    <div>
+                                        <h5 class="font-semibold text-gray-800">Route Optimization</h5>
+                                        <p class="text-sm text-gray-600">Implementing AI-optimized routes could reduce CO₂ emissions by 12-15%. Focus on consolidating deliveries and avoiding peak traffic hours.</p>
+                                        <p class="text-sm text-green-600 mt-1">Potential savings: 341 kg CO₂/month</p>
+                                    </div>
+                                </div>
+                                <div class="flex items-start space-x-4 p-4 bg-blue-50 rounded-lg">
+                                    <div class="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center flex-shrink-0">
+                                        <span class="text-blue-600 text-sm">2</span>
+                                    </div>
+                                    <div>
+                                        <h5 class="font-semibold text-gray-800">Driver Training Program</h5>
+                                        <p class="text-sm text-gray-600">Eco-driving training for drivers showing high fuel consumption patterns. Focus on smooth acceleration and optimal speed maintenance.</p>
+                                        <p class="text-sm text-blue-600 mt-1">Potential savings: 8-10% fuel reduction</p>
+                                    </div>
+                                </div>
+                                <div class="flex items-start space-x-4 p-4 bg-orange-50 rounded-lg">
+                                    <div class="w-8 h-8 bg-orange-100 rounded-full flex items-center justify-center flex-shrink-0">
+                                        <span class="text-orange-600 text-sm">3</span>
+                                    </div>
+                                    <div>
+                                        <h5 class="font-semibold text-gray-800">Predictive Maintenance</h5>
+                                        <p class="text-sm text-gray-600">OBD-II data analysis shows efficiency degradation patterns. Implement predictive maintenance schedules.</p>
+                                        <p class="text-sm text-orange-600 mt-1">Immediate action required: TRK-002, TRK-005</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Feedback Section -->
+                        <div class="border-t pt-6">
+                            <h4 class="text-xl font-bold text-gray-800 mb-4">Report Feedback</h4>
+                            <div class="space-y-4">
+                                <textarea rows="4" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500" placeholder="Add your feedback on this report or specific optimization recommendations..."></textarea>
+                                <div class="flex justify-between items-center">
+                                    <div class="flex space-x-4">
+                                        <button class="text-green-600 hover:text-green-700 text-sm">👍 Helpful Report</button>
+                                        <button class="text-gray-600 hover:text-gray-700 text-sm">📧 Share Report</button>
+                                        <button class="text-blue-600 hover:text-blue-700 text-sm">📊 Export Data</button>
+                                    </div>
+                                    <button class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg text-sm transition-colors">
+                                        Submit Feedback
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Optimization Section -->
+                <div id="optimization" class="section hidden">
+                    <div class="mb-8">
+                        <h2 class="text-3xl font-bold text-gray-800 mb-2">AI-Powered Fleet Optimization</h2>
+                        <p class="text-gray-600">Machine learning algorithms for emission reduction and cost optimization</p>
+                    </div>
+
+                    <!-- Optimization Cards -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                        <div class="bg-white rounded-xl card-shadow p-6 hover:shadow-lg transition-shadow">
+                            <div class="flex items-center justify-between mb-4">
+                                <h3 class="text-lg font-semibold text-gray-800">Route Optimization</h3>
+                                <span class="text-2xl">🗺️</span>
+                            </div>
+                            <p class="text-sm text-gray-600 mb-4">AI-powered route planning to minimize emissions and fuel consumption using real-time traffic data.</p>
+                            <div class="text-2xl font-bold text-green-600 mb-2">-15%</div>
+                            <div class="text-sm text-gray-600 mb-4">Potential CO₂ reduction</div>
+                            <button onclick="optimizeRoutes()" class="w-full bg-green-600 hover:bg-green-700 text-white py-2 px-4 rounded-lg transition-colors">
+                                Optimize Routes
+                            </button>
+                        </div>
+
+                        <div class="bg-white rounded-xl card-shadow p-6 hover:shadow-lg transition-shadow">
+                            <div class="flex items-center justify-between mb-4">
+                                <h3 class="text-lg font-semibold text-gray-800">Load Optimization</h3>
+                                <span class="text-2xl">📦</span>
+                            </div>
+                            <p class="text-sm text-gray-600 mb-4">Maximize vehicle utilization and reduce empty miles through intelligent load planning algorithms.</p>
+                            <div class="text-2xl font-bold text-blue-600 mb-2">-12%</div>
+                            <div class="text-sm text-gray-600 mb-4">Potential fuel savings</div>
+                            <button onclick="optimizeLoads()" class="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded-lg transition-colors">
+                                Optimize Loads
+                            </button>
+                        </div>
+
+                        <div class="bg-white rounded-xl card-shadow p-6 hover:shadow-lg transition-shadow">
+                            <div class="flex items-center justify-between mb-4">
+                                <h3 class="text-lg font-semibold text-gray-800">Eco-Driving Analysis</h3>
+                                <span class="text-2xl">🚗</span>
+                            </div>
+                            <p class="text-sm text-gray-600 mb-4">Driver behavior analysis using OBD-II data with personalized training recommendations.</p>
+                            <div class="text-2xl font-bold text-purple-600 mb-2">-8%</div>
+                            <div class="text-sm text-gray-600 mb-4">Driver improvement potential</div>
+                            <button onclick="analyzeDriving()" class="w-full bg-purple-600 hover:bg-purple-700 text-white py-2 px-4 rounded-lg transition-colors">
+                                Analyze Driving
+                            </button>
+                        </div>
+
+                        <div class="bg-white rounded-xl card-shadow p-6 hover:shadow-lg transition-shadow">
+                            <div class="flex items-center justify-between mb-4">
+                                <h3 class="text-lg font-semibold text-gray-800">Predictive Maintenance</h3>
+                                <span class="text-2xl">🔧</span>
+                            </div>
+                            <p class="text-sm text-gray-600 mb-4">Prevent efficiency degradation through predictive maintenance based on OBD-II sensor data.</p>
+                            <div class="text-2xl font-bold text-orange-600 mb-2">-6%</div>
+                            <div class="text-sm text-gray-600 mb-4">Maintenance cost reduction</div>
+                            <button onclick="predictMaintenance()" class="w-full bg-orange-600 hover:bg-orange-700 text-white py-2 px-4 rounded-lg transition-colors">
+                                Predict Maintenance
+                            </button>
+                        </div>
+
+                        <div class="bg-white rounded-xl card-shadow p-6 hover:shadow-lg transition-shadow">
+                            <div class="flex items-center justify-between mb-4">
+                                <h3 class="text-lg font-semibold text-gray-800">Fleet Composition</h3>
+                                <span class="text-2xl">🚛</span>
+                            </div>
+                            <p class="text-sm text-gray-600 mb-4">Optimize fleet composition with recommendations for vehicle types and fuel alternatives.</p>
+                            <div class="text-2xl font-bold text-teal-600 mb-2">-20%</div>
+                            <div class="text-sm text-gray-600 mb-4">Long-term emission reduction</div>
+                            <button onclick="optimizeFleet()" class="w-full bg-teal-600 hover:bg-teal-700 text-white py-2 px-4 rounded-lg transition-colors">
+                                Optimize Fleet
+                            </button>
+                        </div>
+
+                        <div class="bg-white rounded-xl card-shadow p-6 hover:shadow-lg transition-shadow">
+                            <div class="flex items-center justify-between mb-4">
+                                <h3 class="text-lg font-semibold text-gray-800">Carbon Offsetting</h3>
+                                <span class="text-2xl">🌱</span>
+                            </div>
+                            <p class="text-sm text-gray-600 mb-4">Calculate and recommend carbon offset strategies for unavoidable emissions.</p>
+                            <div class="text-2xl font-bold text-green-600 mb-2">100%</div>
+                            <div class="text-sm text-gray-600 mb-4">Carbon neutrality potential</div>
+                            <button onclick="calculateOffsets()" class="w-full bg-green-600 hover:bg-green-700 text-white py-2 px-4 rounded-lg transition-colors">
+                                Calculate Offsets
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Global variables
+        let isLoggedIn = false;
+        let liveTrackingActive = false;
+        let obdDataInterval;
+
+        // IPCC Emission Factors (kg CO₂ per liter of fuel)
+        const emissionFactors = {
+            diesel: 2.68,
+            gasoline: 2.31,
+            cng: 1.94,
+            electric: 0.0,
+            hybrid: 1.85
+        };
+
+        // Vehicle type fuel consumption factors (L/100km base)
+        const vehicleConsumption = {
+            light: 8.5,
+            medium: 12.0,
+            heavy: 18.5,
+            articulated: 25.0
+        };
+
+        // Show demo function
+        function showDemo() {
+            document.getElementById('landingPage').classList.add('hidden');
+            document.getElementById('loginModal').classList.remove('hidden');
+        }
+
+        // Hide demo modal
+        function hideDemoModal() {
+            document.getElementById('loginModal').classList.add('hidden');
+            document.getElementById('landingPage').classList.remove('hidden');
+        }
+
+        // Scroll to features
+        function scrollToFeatures() {
+            document.getElementById('featuresSection').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // Login function
+        function login(event) {
+            event.preventDefault();
+            const companyId = document.getElementById('companyId').value.trim();
+            const password = document.getElementById('password').value.trim();
+            
+            if (companyId && password) {
+                isLoggedIn = true;
+                document.getElementById('loginModal').classList.add('hidden');
+                document.getElementById('mainApp').classList.remove('hidden');
+                document.getElementById('companyName').textContent = companyId;
+                
+                setTimeout(() => {
+                    populateRecentCalculations();
+                    startDashboardUpdates();
+                }, 100);
+            } else {
+                alert('Please enter both Company ID and Password to access ChainX.');
+            }
+        }
+
+        // Logout function
+        function logout() {
+            isLoggedIn = false;
+            document.getElementById('mainApp').classList.add('hidden');
+            document.getElementById('landingPage').classList.remove('hidden');
+            stopLiveTracking();
+            if (obdDataInterval) {
+                clearInterval(obdDataInterval);
+            }
+        }
+
+        // Show section
+        function showSection(sectionName) {
+            document.querySelectorAll('.section').forEach(section => {
+                section.classList.add('hidden');
+            });
+            document.getElementById(sectionName).classList.remove('hidden');
+            
+            document.querySelectorAll('.sidebar-btn').forEach(btn => {
+                btn.classList.remove('sidebar-active');
+            });
+            document.querySelector(`[data-section="${sectionName}"]`).classList.add('sidebar-active');
+        }
+
+        // Calculate emissions using IPCC methodology
+        function calculateEmissions(event) {
+            event.preventDefault();
+            
+            const origin = document.getElementById('origin').value;
+            const destination = document.getElementById('destination').value;
+            const vehicleType = document.getElementById('vehicleType').value;
+            const fuelType = document.getElementById('fuelType').value;
+            const loadWeight = parseFloat(document.getElementById('loadWeight').value) || 0;
+            const vehicleAge = parseFloat(document.getElementById('vehicleAge').value) || 0;
+            const engineSize = parseFloat(document.getElementById('engineSize').value) || 2.0;
+            const loadFactor = parseFloat(document.getElementById('loadFactor').value) || 50;
+
+            // Simulate route calculation
+            const distance = Math.floor(Math.random() * 300) + 200; // km
+            
+            // IPCC calculation
+            let baseFuelConsumption = vehicleConsumption[vehicleType];
+            
+            // Adjust for load factor
+            const loadAdjustment = 1 + (loadFactor / 100) * 0.3;
+            baseFuelConsumption *= loadAdjustment;
+            
+            // Adjust for vehicle age
+            const ageAdjustment = 1 + (vehicleAge * 0.02);
+            baseFuelConsumption *= ageAdjustment;
+            
+            // Adjust for engine size
+            const engineAdjustment = engineSize / 2.0;
+            baseFuelConsumption *= engineAdjustment;
+            
+            // Calculate total fuel consumption
+            const totalFuel = (baseFuelConsumption / 100) * distance;
+            
+            // Calculate CO₂ emissions using IPCC factors
+            const totalCO2 = totalFuel * emissionFactors[fuelType];
+            const co2PerKm = (totalCO2 / distance) * 1000; // g/km
+            
+            // Display results
+            document.getElementById('totalCO2').textContent = totalCO2.toFixed(1);
+            document.getElementById('co2PerKm').textContent = co2PerKm.toFixed(0);
+            document.getElementById('fuelConsumption').textContent = totalFuel.toFixed(1);
+            document.getElementById('routeDistance').textContent = distance.toFixed(0);
+            
+            // Categorize emissions
+            const categoryElement = document.getElementById('emissionCategory');
+            const categoryText = document.getElementById('categoryText');
+            const categoryDescription = document.getElementById('categoryDescription');
+            
+            if (co2PerKm < 120) {
+                categoryElement.className = 'mt-6 p-4 rounded-lg co2-low';
+                categoryText.textContent = 'Low Emissions ✅';
+                categoryDescription.textContent = 'Excellent performance! This route has low environmental impact.';
+            } else if (co2PerKm < 180) {
+                categoryElement.className = 'mt-6 p-4 rounded-lg co2-medium';
+                categoryText.textContent = 'Moderate Emissions ⚠️';
+                categoryDescription.textContent = 'Good performance with room for optimization.';
+            } else {
+                categoryElement.className = 'mt-6 p-4 rounded-lg co2-high';
+                categoryText.textContent = 'High Emissions ❌';
+                categoryDescription.textContent = 'Consider route optimization or vehicle efficiency improvements.';
+            }
+        }
+
+        // Start live tracking
+        function startLiveTracking() {
+            liveTrackingActive = true;
+            updateVehiclePositions();
+            
+            setInterval(() => {
+                if (liveTrackingActive) {
+                    updateVehiclePositions();
+                }
+            }, 5000);
+        }
+
+        // Stop live tracking
+        function stopLiveTracking() {
+            liveTrackingActive = false;
+        }
+
+        // Update vehicle positions
+        function updateVehiclePositions() {
+            const now = new Date().toLocaleTimeString();
+            document.getElementById('trackingLastUpdate').textContent = now;
+        }
+
+        // Select vehicle
+        function selectVehicle() {
+            const selected = document.getElementById('vehicleSelect').value;
+            console.log('Selected vehicle:', selected);
+        }
+
+        // Simulate OBD-II data
+        function simulateOBDData() {
+            if (obdDataInterval) {
+                clearInterval(obdDataInterval);
+            }
+            
+            obdDataInterval = setInterval(() => {
+                // Simulate real-time OBD data
+                const rpm = Math.floor(Math.random() * 1000) + 1500;
+                const speed = Math.floor(Math.random() * 40) + 50;
+                const fuelRate = (Math.random() * 4 + 6).toFixed(1);
+                const engineLoad = Math.floor(Math.random() * 30) + 30;
+                
+                document.getElementById('engineRPM').textContent = rpm.toLocaleString();
+                document.getElementById('vehicleSpeed').textContent = speed;
+                document.getElementById('fuelRate').textContent = fuelRate;
+                document.getElementById('engineLoad').textContent = engineLoad;
+                
+                // Update sensor data
+                const o2Voltage = (Math.random() * 0.4 + 0.6).toFixed(2);
+                const mafRate = (Math.random() * 5 + 10).toFixed(1);
+                const coolantTemp = Math.floor(Math.random() * 20) + 80;
+                
+                document.getElementById('o2Sensor').textContent = o2Voltage + 'V';
+                document.getElementById('mafSensor').textContent = mafRate + ' g/s';
+                document.getElementById('coolantTemp').textContent = coolantTemp + '°C';
+                
+                // Update progress bars
+                document.getElementById('o2SensorBar').style.width = (parseFloat(o2Voltage) / 1.2 * 100) + '%';
+                document.getElementById('mafSensorBar').style.width = (parseFloat(mafRate) / 20 * 100) + '%';
+                document.getElementById('coolantTempBar').style.width = (coolantTemp / 120 * 100) + '%';
+                
+                // Calculate real-time CO₂
+                const realTimeCO2 = Math.floor(fuelRate * 2.68 / speed * 100000);
+                document.getElementById('realTimeCO2').textContent = realTimeCO2;
+                
+                // Update trip averages
+                const avgCO2 = Math.floor(realTimeCO2 * (0.9 + Math.random() * 0.2));
+                const totalTripCO2 = (avgCO2 * speed * 0.1 / 1000).toFixed(1);
+                const efficiency = (parseFloat(fuelRate) / speed * 100).toFixed(1);
+                
+                document.getElementById('avgCO2').textContent = avgCO2;
+                document.getElementById('totalTripCO2').textContent = totalTripCO2;
+                document.getElementById('fuelEfficiency').textContent = efficiency;
+                
+            }, 2000);
+        }
+
+        // Generate report
+        function generateReport() {
+            const reportDate = new Date().toLocaleDateString('en-US', { 
+                year: 'numeric', 
+                month: 'long', 
+                day: 'numeric' 
+            });
+            document.getElementById('reportDate').textContent = reportDate;
+            
+            document.getElementById('sampleReport').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // Optimization functions
+        function optimizeRoutes() {
+            alert('🗺️ Route optimization initiated! AI algorithms are analyzing traffic patterns and emission data to suggest optimal routes.');
+        }
+
+        function optimizeLoads() {
+            alert('📦 Load optimization started! Analyzing cargo distribution patterns to maximize vehicle utilization.');
+        }
+
+        function analyzeDriving() {
+            alert('🚗 Driver behavior analysis in progress! OBD-II data is being processed to identify eco-driving opportunities.');
+        }
+
+        function predictMaintenance() {
+            alert('🔧 Predictive maintenance analysis running! Sensor data indicates TRK-002 needs attention within 2 weeks.');
+        }
+
+        function optimizeFleet() {
+            alert('🚛 Fleet composition analysis initiated! Evaluating vehicle mix and fuel alternatives for maximum efficiency.');
+        }
+
+        function calculateOffsets() {
+            alert('🌱 Carbon offset calculation complete! Recommend 2.8 tons of verified carbon credits for full neutrality.');
+        }
+
+        // Populate recent calculations
+        function populateRecentCalculations() {
+            const calculations = [
+                { route: 'New York → Boston', co2: '45.2 kg', efficiency: 'Good', time: '2 hours ago' },
+                { route: 'Chicago → Detroit', co2: '67.8 kg', efficiency: 'Moderate', time: '4 hours ago' },
+                { route: 'LA → San Francisco', co2: '89.1 kg', efficiency: 'Poor', time: '6 hours ago' }
+            ];
+            
+            const container = document.getElementById('recentCalculations');
+            container.innerHTML = calculations.map(calc => `
+                <div class="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
+                    <div>
+                        <p class="font-medium text-gray-800">${calc.route}</p>
+                        <p class="text-sm text-gray-600">${calc.time}</p>
+                    </div>
+                    <div class="text-right">
+                        <p class="font-medium text-gray-800">${calc.co2}</p>
+                        <p class="text-sm ${calc.efficiency === 'Good' ? 'text-green-600' : calc.efficiency === 'Moderate' ? 'text-yellow-600' : 'text-red-600'}">${calc.efficiency}</p>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Start dashboard updates
+        function startDashboardUpdates() {
+            setInterval(() => {
+                const activeCount = Math.floor(Math.random() * 3) + 10;
+                document.getElementById('activeVehicles').textContent = activeCount;
+                
+                const currentEmissions = parseFloat(document.getElementById('totalEmissions').textContent.replace(' kg', '').replace(',', ''));
+                const newEmissions = currentEmissions + (Math.random() - 0.5) * 10;
+                document.getElementById('totalEmissions').textContent = newEmissions.toLocaleString() + ' kg';
+                
+                const now = new Date().toLocaleTimeString();
+                document.getElementById('lastUpdate').textContent = now;
+                
+            }, 10000);
+        }
+
+        // Add quick trip function
+        function addQuickTrip(event) {
+            event.preventDefault();
+            
+            const vehicleId = document.getElementById('quickVehicleId').value;
+            const distance = parseFloat(document.getElementById('quickDistance').value);
+            const fuel = parseFloat(document.getElementById('quickFuel').value);
+            const load = parseFloat(document.getElementById('quickLoad').value);
+            
+            // Calculate CO₂ emissions
+            const co2 = fuel * 2.68; // kg CO₂
+            const efficiency = (fuel / distance * 100).toFixed(1); // L/100km
+            
+            // Update dashboard stats
+            const currentEmissions = parseFloat(document.getElementById('totalEmissions').textContent.replace(' kg', '').replace(',', ''));
+            const newTotal = currentEmissions + co2;
+            document.getElementById('totalEmissions').textContent = newTotal.toLocaleString() + ' kg';
+            
+            // Show success message
+            alert(`✅ Trip added successfully!\n\nVehicle: ${vehicleId}\nDistance: ${distance} km\nCO₂ Emissions: ${co2.toFixed(1)} kg\nFuel Efficiency: ${efficiency} L/100km`);
+            
+            // Reset form with new values
+            document.getElementById('quickVehicleId').value = 'TRK-' + String(Math.floor(Math.random() * 900) + 100).padStart(3, '0');
+            document.getElementById('quickDistance').value = Math.floor(Math.random() * 200) + 50;
+            document.getElementById('quickFuel').value = (Math.random() * 10 + 5).toFixed(1);
+            document.getElementById('quickLoad').value = Math.floor(Math.random() * 2000) + 1000;
+        }
+
+        // Add new vehicle function
+        function addNewVehicle(event) {
+            event.preventDefault();
+            
+            const vehicleId = document.getElementById('newVehicleId').value;
+            const vehicleType = document.getElementById('newVehicleType').value;
+            const fuelType = document.getElementById('newVehicleFuel').value;
+            
+            // Add to vehicle select dropdown
+            const vehicleSelect = document.getElementById('vehicleSelect');
+            const option = document.createElement('option');
+            option.value = vehicleId;
+            option.textContent = `${vehicleId} - ${vehicleType.charAt(0).toUpperCase() + vehicleType.slice(1)} Truck (New)`;
+            vehicleSelect.appendChild(option);
+            
+            // Update active vehicles count
+            const currentActive = parseInt(document.getElementById('activeVehicles').textContent);
+            document.getElementById('activeVehicles').textContent = currentActive + 1;
+            
+            // Show success message
+            alert(`🚛 Vehicle ${vehicleId} added successfully!\n\nType: ${vehicleType.charAt(0).toUpperCase() + vehicleType.slice(1)} Truck\nFuel: ${fuelType.charAt(0).toUpperCase() + fuelType.slice(1)}\n\nVehicle is now available for tracking and data entry.`);
+            
+            // Reset form with new ID
+            const nextId = parseInt(vehicleId.split('-')[1]) + 1;
+            document.getElementById('newVehicleId').value = 'TRK-' + String(nextId).padStart(3, '0');
+        }
+
+        // Add manual OBD data function
+        function addManualOBDData(event) {
+            event.preventDefault();
+            
+            const vehicleId = document.getElementById('obdVehicleId').value;
+            const rpm = document.getElementById('manualRPM').value;
+            const speed = document.getElementById('manualSpeed').value;
+            const fuelRate = document.getElementById('manualFuelRate').value;
+            const engineLoad = document.getElementById('manualEngineLoad').value;
+            
+            // Update the live display with manual data
+            document.getElementById('engineRPM').textContent = parseInt(rpm).toLocaleString();
+            document.getElementById('vehicleSpeed').textContent = speed;
+            document.getElementById('fuelRate').textContent = fuelRate;
+            document.getElementById('engineLoad').textContent = engineLoad;
+            
+            // Calculate real-time CO₂
+            const realTimeCO2 = Math.floor(parseFloat(fuelRate) * 2.68 / parseFloat(speed) * 100000);
+            document.getElementById('realTimeCO2').textContent = realTimeCO2;
+            
+            // Show success message
+            alert(`📊 OBD-II data recorded for ${vehicleId}!\n\nRPM: ${rpm}\nSpeed: ${speed} km/h\nFuel Rate: ${fuelRate} L/h\nEngine Load: ${engineLoad}%\nCalculated CO₂: ${realTimeCO2} g/km`);
+            
+            // Generate new sample values
+            document.getElementById('manualRPM').value = Math.floor(Math.random() * 1000) + 1500;
+            document.getElementById('manualSpeed').value = Math.floor(Math.random() * 40) + 50;
+            document.getElementById('manualFuelRate').value = (Math.random() * 4 + 6).toFixed(1);
+            document.getElementById('manualEngineLoad').value = Math.floor(Math.random() * 30) + 30;
+        }
+
+        // Initialize on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            // Show landing page by default
+            document.getElementById('landingPage').classList.remove('hidden');
+        });
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9817cb0b31b402c2',t:'MTc1ODI3MTM4Mi4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
